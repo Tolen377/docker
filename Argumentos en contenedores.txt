@@ -1,0 +1,43 @@
+# Ejecutar un Contenedor con Variables de Entorno
+
+## Comando General:
+docker run --name <nombre_contenedor> -d -it -e <VAR>=<VALOR> <imagen_contenedor>
+
+# <nombre_contenedor>: Nombre que quieres asignar al contenedor.
+# -d: Ejecuta el contenedor en segundo plano (modo desacoplado).
+# -it: Modo interactivo con una terminal pseudo-TTY.
+# -e: Define una variable de entorno.
+# <VAR>=<VALOR>: La variable de entorno y su valor.
+# <imagen_contenedor>: Imagen de Docker que quieres usar para el contenedor.
+
+## Ejemplo de Variables de Entorno con MariaDB:
+docker run --name mariadb -d -e MARIADB_ROOT_PASSWORD="Tmao180176." mariadb
+
+# Este comando ejecuta un contenedor MariaDB con la variable de entorno `MARIADB_ROOT_PASSWORD` establecida.
+
+### Comprobar que el Contenedor se Levantó Correctamente:
+docker exec -it mariadb bash
+# Este comando te permite acceder al contenedor `mariadb` y trabajar directamente en su entorno.
+
+## Ejemplo con Múltiples Variables de Entorno:
+docker run --name mariadb -d -e MARIADB_DATABASE="grotecnik" -e MARIADB_USER="tolen" -e MARIADB_PASSWORD="Tmao180176." -e MARIADB_ROOT_PASSWORD="Tmao180176." mariadb
+
+# Este comando ejecuta un contenedor MariaDB con múltiples variables de entorno establecidas:
+# - MARIADB_DATABASE: Define el nombre de la base de datos a crear.
+# - MARIADB_USER: Define el nombre de usuario a crear.
+# - MARIADB_PASSWORD: Define la contraseña para el usuario especificado.
+# - MARIADB_ROOT_PASSWORD: Define la contraseña para el usuario root de MariaDB.
+
+# Comando útil para ver variables de entorno dentro de un contenedor:
+printenv
+# Puedes ejecutar `printenv` dentro de un contenedor para ver todas las variables de entorno establecidas.
+
+
+# Ejecutar un Contenedor con Variables de Entorno desde un Archivo .properties
+docker run --name mariadb_env -d --env-file mariadb.properties mariadb
+
+# Explicación:
+# --name mariadb_env             ->    Asigna el nombre "mariadb_env" al contenedor.
+# -d                             ->    Ejecuta el contenedor en segundo plano (detached mode).
+# --env-file mariadb.properties  ->    Usa las variables de entorno definidas en el archivo "mariadb.properties".
+# mariadb                        ->    Utiliza la imagen de Docker "mariadb".

@@ -88,24 +88,6 @@ docker exec -it ubuntu bash
 # Este comando inicia una sesión interactiva de `bash` dentro del contenedor `ubuntu`,
 # permitiéndote trabajar directamente en el entorno del contenedor.
 
-# Ejecutar un Comando Dentro del Contenedor
-
-## Comando General:
-docker exec <nombre_contenedor> <comando>
-
-# <nombre_contenedor>: Nombre o ID del contenedor en el cual quieres ejecutar el comando.
-# <comando>: El comando que deseas ejecutar dentro del contenedor.
-
-## Ejemplos:
-
-# 1. Ejecutar un Comando Específico:
-docker exec ubuntu date
-# Este comando ejecuta `date` en el contenedor llamado `ubuntu` y muestra la fecha y hora actuales.
-
-# 2. Acceder a una Sesión Interactiva de Bash:
-docker exec -it ubuntu bash
-# Este comando inicia una sesión interactiva de `bash` dentro del contenedor `ubuntu`,
-# permitiéndote trabajar directamente en el entorno del contenedor.
 
 # Docker logs y docker kill
 
