@@ -1,0 +1,35 @@
+docker run --name mi_servidor_web -d -p 9000:80 httpd
+# --name mi_servidor_web: Asigna el nombre "mi_servidor_web" al contenedor.
+# -d: Ejecuta el contenedor en segundo plano.
+# -p 9000:80: Mapea el puerto 9000 del host al puerto 80 del contenedor.
+# httpd: Utiliza la imagen de Apache HTTP Server.
+
+docker run --name nginx-server -d -P nginx
+# --name nginx-server: Asigna el nombre "nginx-server" al contenedor.
+# -d: Ejecuta el contenedor en segundo plano.
+# -P: Publica todos los puertos expuestos por el contenedor y asigna puertos disponibles automáticamente en el host.
+# nginx: Utiliza la imagen de NGINX (servidor web).
+
+# Redes Bridge en Docker
+
+# Las redes Bridge son el tipo de red por defecto que Docker crea.
+# Cuando inicias un contenedor, Docker crea una interfaz virtual llamada "bridge".
+# Esta interfaz permite que los contenedores se comuniquen entre sí y con el host a través de la red de host.
+# La red bridge virtual facilita la comunicación entre los contenedores y la interacción con el mundo exterior.
+
+# Listar todas las redes en Docker
+# Este comando muestra todas las redes disponibles en Docker, incluidas las redes bridge predeterminadas.
+docker network ls
+
+# Inspeccionar una red específica
+# Este comando muestra detalles sobre una red en particular, como los contenedores conectados a ella.
+# Reemplaza <networkName> con el nombre o ID de la red que deseas inspeccionar.
+docker network inspect <networkName>
+
+# Inspeccionar los puertos de un contenedor
+# Este comando muestra los puertos mapeados del contenedor.
+# Reemplaza <container> con el nombre o ID del contenedor que deseas inspeccionar.
+docker port <container>
+
+
+
