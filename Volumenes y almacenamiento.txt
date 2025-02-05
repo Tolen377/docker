@@ -1,0 +1,80 @@
+# Almacenamiento y volumenes en Docker
+
+#Volúmenes
+Definición: Los volúmenes son mecanismos de almacenamiento manejados por Docker que se pueden usar para persistir datos generados 
+por y utilizados por los contenedores.
+
+Ventajas:
+ - Integración sencilla con herramientas de backup y restore.
+ - Independencia del host, permitiendo su reutilización en diferentes hosts Docker.
+ - Mejor rendimiento en comparación con otros métodos de almacenamiento.
+
+#Bind Mounts
+Definición: Los bind mounts son un tipo de montaje donde un archivo o directorio en el sistema de archivos del host se monta en un contenedor,
+permitiendo compartir datos entre el host y el contenedor.
+Ventajas:
+  - Mayor flexibilidad, ya que cualquier archivo o directorio del host puede ser montado en el contenedor.
+  - Útil para desarrollo y pruebas, permitiendo cambios en tiempo real en el sistema de archivos del host.
+
+#Crea y ejecuta un nuevo contenedor Docker con un volumen
+docker run --name ubuntu-container -it -v /data ubuntu bash                     
+  
+# Lista todos los volúmenes de Docker
+docker volume ls
+
+# Inspecciona un volumen especifico en docker y muestra informacion detallada
+docker volume inspect <volumeName>
+
+# Crea y ejecuta un nuevo contenedor Docker que comparte volúmenes desde otro contenedor.
+docker run --name ubuntu-test -it --volumes-from ubuntu-container ubuntu
+
+#Borrar un volumen
+docker volume rm <volumeId>
+
+#Borrar todos los contenedores inutilizables
+docker volume prune
+
+#Crear un volumen
+docker volume create <volumeName>
+
+#Montar un volumen en el contenedor
+# -v public_volume:/usr/local/apache2/htdocs
+# - public_volume: Nombre del volumen que se creará o se usará.
+# - /usr/local/apache2/htdocs: Ruta en el contenedor donde se montará el volumen.
+# Esto permite que los datos almacenados en el volumen "public_volume" sean accesibles desde el contenedor en esa ruta específica, que es el directorio predeterminado para los archivos web del servidor Apache.
+docker run -d --name <containerName> -p 80:80 -v <volumeName>:<path> <imageName>
+  - Ejemplo: docker run -d --name apache_server -p 80:80 -v public_volume:/usr/local/apache2/htdocs httpd
+ 
+#Bind Mounts -Compartir directorios del host con el contenedor
+Con este comando, puedes compartir un directorio del host (/home/tolen/test_files/) con el contenedor (/bind_mount).
+Esto es útil para trabajar con archivos del sistema host dentro del contenedor Docker.
+
+docker run --name ubuntu_server -it -v /home/tolen/test_files/:/bind_mount ubuntu
+
+# Diferencias entre Bind Mounts y Volúmenes en Docker
+
+# Bind Mount:
+# - Utiliza un directorio o archivo específico en el sistema de archivos del host.
+# - Puede montarse en cualquier lugar del contenedor.
+# - Adecuado para situaciones donde se necesita acceder a datos específicos del host.
+# - Ejemplo: Compartir un directorio de desarrollo entre el host y el contenedor.
+# - No administrado por Docker, por lo que no aparece en `docker volume ls`.
+
+# Volumen:
+# - Administrado por Docker. Se almacena en el sistema de archivos del host en un directorio específico manejado por Docker.
+# - Puede montarse en cualquier contenedor y es independiente de la ubicación en el host.
+# - Adecuado para datos que necesitan persistir más allá del ciclo de vida del contenedor.
+# - Ejemplo: Almacenar datos de una base de datos.
+# - Aparece en `docker volume ls` y puede ser gestionado usando comandos Docker (`docker volume create`, `docker volume inspect`, etc.).
+
+# Comando para crear un contenedor con Bind Mount:
+# docker run --name ubuntu_server -it -v /home/tolen/test_files/:/bind_mount ubuntu
+
+# Comando para crear un contenedor con Volumen:
+# docker volume create my_volume
+# docker run --name ubuntu_server -it -v my_volume:/data ubuntu
+
+
+
+
+  

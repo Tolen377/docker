@@ -1,0 +1,161 @@
+# Comandos básicos de Docker
+
+# Ejecutar un contenedor desde una imagen de Docker Hub
+docker run hello-world
+# -> Descarga la imagen del Docker Hub y crea el contenedor
+
+# Descargar una imagen del Docker Hub sin ejecutarla
+docker pull <imagen>
+# -> Únicamente descarga la imagen del Docker Hub
+
+# Listar todas las imágenes disponibles localmente
+docker images
+# -> Muestra una lista de todas las imágenes descargadas
+
+# Mostrar contenedores en ejecución
+docker ps
+# -> Muestra los contenedores que están arrancados
+
+# Mostrar todos los contenedores (arrancados y parados)
+docker ps -a
+# -> Muestra los contenedores parados y arrancados
+
+# Mostrar el tamaño de los contenedores
+docker ps -s
+# -> Muestra el tamaño de los contenedores
+
+
+
+# Comandos básicos de Docker
+
+# Crear un contenedor con un nombre específico
+docker run --name <nombre> <imagen>
+# -> Asigna un nombre al contenedor
+
+# Crear un contenedor interactivo
+docker run --name <nombre> -it <imagen>
+# -> Inicia un contenedor en modo interactivo, permitiendo la interacción con la terminal
+
+# Parar y arrancar contenedores
+
+# Parar un contenedor
+docker stop <contenedorId | contenedorName>
+# -> Detiene un contenedor en ejecución
+
+# Arrancar un contenedor
+docker start <contenedorId | contenedorName>
+# -> Inicia un contenedor detenido
+
+# Ejecutar un contenedor Tomcat con nombre, en segundo plano y mapeando puertos
+docker run --name localTomcat -d -p 8080:8080 tomcat
+# -> Crea un contenedor llamado localTomcat, lo ejecuta en segundo plano y mapea el puerto 8080 del host al puerto 8080 del contenedor
+	-> argumento -d para trabajar con contenedores en Backgroud
+
+
+# Comandos para borrar contenedores e imágenes en Docker
+
+# Borrar un contenedor
+docker rm <idContenedor | nameContenedor>
+# -> Elimina un contenedor especificado por su ID o nombre
+
+# Borrar una imagen
+docker rmi <idImagen | nameImagen>
+# -> Elimina una imagen especificada por su ID o nombre
+
+# Forzar la eliminación de un contenedor
+docker rm -f <idContenedor | nameContenedor>
+# -> Fuerza la eliminación de un contenedor en ejecución
+
+# Forzar la eliminación de una imagen
+docker rmi -f <idImagen | nameImagen>
+# -> Fuerza la eliminación de una imagen que puede estar en uso
+
+# Ejecutar un Comando Dentro del Contenedor
+## Comando General:
+docker exec <nombre_contenedor> <comando>
+
+# <nombre_contenedor>: Nombre o ID del contenedor en el cual quieres ejecutar el comando.
+# <comando>: El comando que deseas ejecutar dentro del contenedor.
+
+## Ejemplos:
+
+# 1. Ejecutar un Comando Específico:
+docker exec ubuntu date
+# Este comando ejecuta `date` en el contenedor llamado `ubuntu` y muestra la fecha y hora actuales.
+
+# 2. Acceder a una Sesión Interactiva de Bash:
+docker exec -it ubuntu bash
+# Este comando inicia una sesión interactiva de `bash` dentro del contenedor `ubuntu`,
+# permitiéndote trabajar directamente en el entorno del contenedor.
+
+
+# Docker logs y docker kill
+
+## Crear un Contenedor que Ejecute un Comando en Bucle
+docker run --name ubuntuTest -d ubuntu sh -c "while true; do date; done"
+# Este comando crea y ejecuta un contenedor llamado `ubuntuTest` que imprime la fecha en bucle.
+
+## Ver los Logs del Contenedor
+docker logs <nombre_contenedor>
+
+# <nombre_contenedor>: Nombre o ID del contenedor del cual quieres ver los logs.
+
+# Ejemplo:
+docker logs ubuntuTest
+
+## Ver los Logs en Tiempo Real
+docker logs -f <nombre_contenedor>
+
+# La bandera `-f` muestra los logs en tiempo real.
+
+# Ejemplo:
+docker logs -f ubuntuTest
+
+## Matar un Contenedor
+docker kill <nombre_contenedor>
+
+# <nombre_contenedor>: Nombre o ID del contenedor que quieres matar (detener de inmediato).
+
+# Ejemplo:
+docker kill ubuntuTest
+
+
+## Ver Estadísticas de Múltiples Contenedores: 
+docker stats <nombre_contenedor1> <nombre_contenedor2>
+
+
+
+# Información del Sistema Docker
+
+## Ver Información del Sistema Docker:
+docker system info
+
+# Este comando muestra información detallada sobre el sistema Docker, 
+# incluyendo detalles del servidor, versión del Docker, almacenamiento, red y más.
+
+## Ver Uso del Disco del Sistema Docker:
+docker system df
+
+# Este comando muestra un resumen del uso del disco del sistema Docker, 
+# incluyendo las imágenes, contenedores y volúmenes que ocupan espacio en el disco.
+
+# Copiar Archivos entre el Sistema Operativo y un Contenedor
+
+## Comando General:
+docker cp <archivo> <contenedor>:<ruta>
+
+# <archivo>: Ruta del archivo en el sistema operativo.
+# <contenedor>: Nombre o ID del contenedor.
+# <ruta>: Ruta de destino en el contenedor.
+
+## Ejemplos:
+
+# 1. Copiar un Archivo desde el Sistema Operativo al Contenedor:
+docker cp command.sh ubuntu-it:/tmp
+# Este comando copia el archivo `command.sh` desde el sistema operativo al contenedor `ubuntu-it`,
+# específicamente a la ruta `/tmp` dentro del contenedor.
+
+# 2. Copiar un Archivo desde el Contenedor al Sistema Operativo:
+docker cp ubuntu-it:/home/ubuntu/holaMundo.txt .
+# Este comando copia el archivo `holaMundo.txt` desde el contenedor `ubuntu-it`,
+# específicamente desde la ruta `/home/ubuntu/`, al directorio actual del sistema operativo.

@@ -31,5 +31,103 @@ docker network inspect <networkName>
 # Reemplaza <container> con el nombre o ID del contenedor que deseas inspeccionar.
 docker port <container>
 
+#Crear redes
+
+# Crear una red simple llamada 'rex'
+# Este comando crea una red de Docker llamada 'rex'
+docker network create rex
+
+# Crear una red con una subred especificada
+# Este comando crea una red de Docker llamada 'roma' con la subred 192.168.0.0/16
+docker network create --subnet=192.168.0.0/16 roma
+
+# Asociar un contenedor a una red desde el arranque
+# Este comando inicia un contenedor llamado 'tolen-server' y lo asocia a la red 'rex'
+docker run --name tolen-server -it --network rex ubuntu
+
+# Asociar un contenedor a una red en cualquier momento
+# Este comando agrega el contenedor 'tolen-server' a la red 'roma'
+# Nota: este comando no desasocia el contenedor de otra red, sino que lo suma a la nueva red.
+# Por lo tanto, el contenedor funcionará en ambas redes de Docker.
+docker network connect roma tolen-server
+
+# Desasociar un contenedor de una red
+# Este comando desasocia el contenedor 'tolen-server' de la red 'roma'
+docker network disconnect roma tolen-server
+
+# Enlazar contenedores de la misma red por el nombre
+
+Cuando los contenedores están asociados a una misma red de Docker, pueden comunicarse entre sí utilizando simplemente sus nombres de contenedor. 
+Esto elimina la necesidad de configurar direcciones IP manualmente o realizar ajustes adicionales. 
+Docker gestiona la resolución de nombres de manera automática dentro de la red.
+
+### Ejemplo:
+# Crear una red llamada 'mi_red'
+docker network create mi_red
+
+# Iniciar dos contenedores en la red 'mi_red'
+docker run -d --name contenedor1 --network mi_red ubuntu sleep 1000
+docker run -d --name contenedor2 --network mi_red ubuntu sleep 1000
+
+# Desde 'contenedor1', puedes hacer ping a 'contenedor2' utilizando su nombre
+docker exec contenedor1 ping contenedor2
+
+#Ejemplo de enlazar contenedores con mysql y wordpress
+#!/bin/bash
+
+# Ejecutar el contenedor MySQL
+# Este comando inicia un contenedor MySQL en la red 'rex' con las siguientes configuraciones:
+# - Nombre del contenedor: mysql-server
+# - Puertos: 3306 del contenedor mapeado al 3306 del host
+# - Variables de entorno:
+#   * Contraseña del usuario root
+#   * Usuario, contraseña y nombre de la base de datos
+docker run -d --name mysql-server -p 3306:3306 -e MYSQL_ROOT_PASSWORD=tmao180176 -e MYSQL_USER=tolen -e MYSQL_PASSWORD=tmao180176 -e MYSQL_DATABASE=wpdb --network rex mysql
+
+# Ejecutar el contenedor WordPress
+# Este comando inicia un contenedor WordPress en la red 'rex' con las siguientes configuraciones:
+# - Nombre del contenedor: wp
+# - Puertos: 80 del contenedor mapeado al 9000 del host
+# - Variables de entorno:
+#   * Host de la base de datos (mysql-server)
+#   * Nombre de la base de datos (wpdb)
+#   * Usuario y contraseña de la base de datos (tolen, tmao180176)
+docker run -d --name wp -p 9000:80 --network rex -e WORDPRESS_DB_HOST=mysql-server -e WORDPRESS_DB_NAME=wpdb -e WORDPRESS_DB_USER=tolen -e WORDPRESS_DB_PASSWORD=tmao180176 wordpress
 
 
+#Borrar una red
+docker network rm <redName>
+
+# Información sobre el uso de la red de tipo host en Docker
+# Cuando utilizas una red de tipo host en Docker, los contenedores comparten la misma interfaz de red que el anfitrión.
+# Esto significa que los contenedores tienen acceso directo a la red de la máquina host y pueden utilizar sus puertos sin necesidad de mapeo adicional.
+# 
+# El uso de la red host puede ser útil para aplicaciones que requieren un rendimiento de red óptimo o que necesitan acceder a servicios que solo están disponibles en la red del host.
+# 
+# Ejemplo de comando para ejecutar un contenedor con la red host:
+# docker run --network host <imageName>
+------------------------------------------------------------------
+# Información sobre el uso de la red de tipo host en Docker
+# 
+# Cuando utilizas una red de tipo host en Docker, los contenedores comparten la misma interfaz de red que el anfitrión.
+# Esto significa que los contenedores tienen acceso directo a la red de la máquina host y pueden utilizar sus puertos sin necesidad de mapeo adicional.
+# 
+# El uso de la red host puede ser útil para aplicaciones que requieren un rendimiento de red óptimo o que necesitan acceder a servicios que solo están disponibles en la red del host.
+# 
+# Ejemplo de comando para ejecutar un contenedor con la red host:
+# docker run --network host <imageName>
+# 
+-------------------------------------------------------------------
+# Información sobre el uso de la red de tipo none en Docker
+# Las redes de tipo none en Docker son útiles cuando deseas que un contenedor no tenga acceso a ninguna red.
+# 
+# Puntos clave:
+# - Aislamiento total: Los contenedores conectados a la red none no tienen acceso a la red externa ni a otras redes de Docker. Esto los aísla completamente a nivel de red.
+# - Configuración manual: Al utilizar la red none, puedes configurar manualmente la red del contenedor según sea necesario, sin ninguna configuración predeterminada de Docker.
+# - Propósito específico: Puede ser útil para tareas que no requieren acceso a la red o para pruebas y depuración en las que desees evitar cualquier interacción de red no deseada.
+# 
+# Para utilizar la red none, puedes ejecutar un contenedor de la siguiente manera:
+# docker run --network none <imageName>
+# 
+# Los contenedores conectados a una red de tipo none no tienen acceso a la red del host ni a ninguna otra red.
+# Esto significa que están completamente aislados a nivel de red. Sin embargo, sí pueden interactuar con el sistema de archivos del host y otros recursos compartidos si estos han sido configurados explícitamente.
