@@ -1,0 +1,12 @@
+#Crear una nueva imagen a partir de un contenedor
+docker commit nameContainer/idContainer nameNewImage
+
+#Crear archivo Dockerfile desde linux
+- vi Dockerfile
+#Construir la imagen
+Ejemplo1:
+	- docker build -t python-img-env .
+	- docker run -it --name python_env python-img-env:V1
+Ejemplo2:
+	- docker build -t python-env-img:v2 .
+	- docker run -it --rm python-env-img:v2 bash
