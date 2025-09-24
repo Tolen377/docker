@@ -1,0 +1,42 @@
+services:
+  tolen-wp:
+    image: wordpress
+    container_name: wp
+    restart: always
+    ports:
+      - 9090:80
+    env_file: wordpress.properties
+    depends_on:
+      dev_db:
+        condition: service_healthy
+    volumes:
+       - /root/pr_wp/html:/var/www/html
+    networks:
+      - wp-net
+    profiles:
+      - dev
+      - prod
+### DEV ###
+  dev_db:
+    image: mysql
+    container_name: dev_db
+    restart: always
+    env_file: mysql.properties
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=elseptimohokague377"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      wp-net:
+        aliases:
+          - db-host
+    profiles:
+      - dev
+
+volumes:
+  db:
+networks:
+  wp-net:

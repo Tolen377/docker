@@ -1,0 +1,7 @@
+services:
+  tolen-web:
+    build: .
+    image: tolen/web:v1
+    container_name: tolen_frontend
+    ports:
+      - "80:80"

@@ -1,0 +1,9 @@
+services:
+  tolen-apache:
+    image: httpd
+    ports:
+    - "80:80"
+  tolen-tomcat:
+    image: tomcat
+    ports:
+    - "8080:8080"

@@ -1,0 +1,35 @@
+Arrancar servicos de archivo docker-compose.yml
+	- docker compose up
+	- docker compose up -d   -> en background
+Listar contenedores dentro del proyecto
+	- docker compose ps
+
+Nota: en las ultimas versiones de compose ya no es necesario especi
+	  ficar la version.
+
+Parar y arancar un proyecto (tambien sirve para servicios indiduales):
+	- docker compose stop
+	- docker compose start -> background por defecto
+
+Detiene y remueve todos los recursos del proyecto
+	- docker compose down
+	- docker compose --profile nginx down   ->> parar cun proyecto con perfil
+	
+Listar los proyectos en ejecucion a nivel global:
+	- docker compose ls
+
+Ver logs de un servicio especifico:
+	- docker compose logs tolen-apache -f
+	
+Pausar un servicio
+	- docker compose pause <serviceName>
+	- docker compose unpuase <serviceName>
+
+Elimina los contenedores parados
+	- docker compose rm
+
+reiniciar los servicios
+	- docker compose restart
+	
+Iniciar con un perfil:
+	- docker compose --profile dev up -d
