@@ -1,0 +1,43 @@
+----------------- Registry ----------------- 
+
+Crear un registro
+	- docker run -d -p 5000:5000 --restart always --name registry registry:3
+	
+Cambiar el almacenamiento a la hora de crear un registro
+	- docker run --name dev-registry -p 5001:5000 --restart always -v /mnt/d/docker/docker/dev_registry:/var/lib/registry -d registry:3
+
+Nota: tambien se puede crear un volumen con "docker volume create <volumeName>"	
+      y asociarlo al registro de la siguiente manera:
+	- docker run --name <nameRegistry> -p <port1:port2> --restart <restartOption> \
+      -v <volumeName>:<path> -d registry:3
+	
+Etiquetar imagen
+	- docker tag <imageName> <host>:<port>/<finalName>
+	- docker tag tolen/web:v1 localhost:5000/tolen_web
+	
+Subir imagen a un repositorio
+	- docker push <newTag>
+	- docker push localhost:5000/tolen_web
+	
+Como descargar un imagen
+	- docker pull <imageTage>
+	- docker pull localhost:5000/tolen_web:latest
+
+En caso de conectarse a un repositorio que no tiene certificdos TLS agregar, 
+ya sea su ip o hostname, dentro de la propiedad "insecure-registries" del
+daemon.json
+
+
+-------------------- Registry Api --------------------
+Verificar las imagenes en el registro
+	- <host>:<port>/v2/_catalog
+	- http://localhost:5001/v2/_catalog
+
+Para crear un registro securizado generar un certificado y llave privada
+con ayuda del script "generar.sh", se crearaa un user y una password,
+posteriormente ejecutar:
+	- docker login <host>:<port>
+una vez logeado podras utilizar el registro
+	
+
+
